@@ -1,9 +1,14 @@
-FROM python:3
+FROM python:3.10
 WORKDIR /app
 COPY backend/dependencies.txt .
-RUN pip install -r dependencies.txt
+
+
+RUN pip install virtualenv
+RUN virtualenv venv
+
+RUN . venv/bin/activate && pip install -r dependencies.txt
 
 COPY backend/ .
-RUN python manage.py migrate
+RUN . venv/bin/activate && python manage.py migrate
 EXPOSE 8000
 CMD [ "python","manage.py","runserver","0.0.0.0:8000"]
