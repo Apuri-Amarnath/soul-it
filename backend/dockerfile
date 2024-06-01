@@ -6,10 +6,14 @@ COPY backend/dependencies.txt .
 RUN pip install virtualenv
 RUN virtualenv venv
 
+
 RUN . venv/bin/activate && pip install -r dependencies.txt
 
 COPY backend/ .
-COPY backend/.env.example .
+ARG DJANGO_SECRET_KEY
+ARG FRONTEND_URL
+ENV DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY
+ENV FRONTEND_URL=$FRONTEND_URL
 EXPOSE 8000 
 
 RUN . venv/bin/activate && python manage.py migrate
