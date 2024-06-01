@@ -9,6 +9,9 @@ RUN virtualenv venv
 RUN . venv/bin/activate && pip install -r dependencies.txt
 
 COPY backend/ .
-RUN . venv/bin/activate && python manage.py migrate
 EXPOSE 8000
+ENV DJANGO_SECRET_KEY somekey
+ENV FRONTEND_URL http://127.0.0.1:3000
+RUN . venv/bin/activate && python manage.py migrate
+
 CMD [ "python","manage.py","runserver","0.0.0.0:8000"]
