@@ -1,21 +1,35 @@
+
 FROM python:3.10
+
 WORKDIR /app
+
+
 COPY backend/dependencies.txt .
 
 
 RUN pip install virtualenv
+
+
 RUN virtualenv venv
 
 
 RUN . venv/bin/activate && pip install -r dependencies.txt
 
+# Copy the rest of the application code to the working directory
 COPY backend/ .
+
+# Set build arguments for Django secret key and frontend URL
 ARG DJANGO_SECRET_KEY
 ARG FRONTEND_URL
+
+
 ENV DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY
 ENV FRONTEND_URL=$FRONTEND_URL
-EXPOSE 8000 
+
+
+EXPOSE 8000
+
 
 RUN . venv/bin/activate && python manage.py migrate
 
-CMD [ "python","manage.py","runserver","127.0.0.1:8000"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
